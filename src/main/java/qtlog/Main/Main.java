@@ -1,7 +1,5 @@
 package qtlog.Main;
 
-import javax.swing.UIClientPropertyKey;
-
 import qtlog.DPSReportController.LogUploader;
 import qtlog.DataModel.DataModel;
 import qtlog.DiscordController.DiscordController;
