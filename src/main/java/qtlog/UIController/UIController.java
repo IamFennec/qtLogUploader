@@ -19,5 +19,4 @@ public class UIController implements IModelObserver{
         LogDTO tempLog = this.dataModel.getLatestLog();
         this.ui.updateUI(tempLog);
     }
-    
 }
