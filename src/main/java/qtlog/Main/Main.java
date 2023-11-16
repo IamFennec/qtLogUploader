@@ -16,6 +16,27 @@ public class Main {
     }
 
     public static void start(){
+        //Get Log Folder Path on first startup 
+        String folderPath = ConfigManager.readLogPath();
+        Scanner scanner = new Scanner(System.in);
+
+        if (folderPath.isEmpty()) {
+            System.out.println("Enter logpath plsssss: ");
+            String userInput = scanner.nextLine();
+            ConfigManager.writeLogPath(userInput);
+        }
+
+        //Get webhook on first startup 
+        String webhook = ConfigManager.readWebhook();
+
+        if (webhook.isEmpty()) {
+            System.out.println("Enter webhook url: ");
+            String userInput = scanner.nextLine();
+            scanner.close();
+            ConfigManager.writeWebhook(userInput);
+        }
+
+        //init
         FileMonitor fileMonitor = new FileMonitor();
         LogUploader logUploader = new LogUploader();
         DiscordController discordController = new DiscordController();
@@ -27,16 +48,6 @@ public class Main {
         Thread fileMonitorThread = new Thread(fileMonitor); 
         fileMonitorThread.start();
 
-        //Get Log Folder Path on first startup 
-        String folderPath = ConfigManager.readLogPath();
-        Scanner scanner = new Scanner(System.in);
-
-        if (folderPath.isEmpty()) {
-            System.out.println("Enter logpath plsssss: ");
-            String userInput = scanner.nextLine();
-            scanner.close();
-            ConfigManager.writeLogPath(userInput);
-        }
 
         while(true) {
 

@@ -12,7 +12,7 @@ public class ConfigManager {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
             properties.load(input);
-            return properties.getProperty("logPath", "default");
+            return properties.getProperty("logPath", "");
         } catch (IOException e) {
             e.printStackTrace();
             return "";
@@ -20,12 +20,43 @@ public class ConfigManager {
     }
 
     public static void writeLogPath(String newLogPath) {
-        Properties properties = new Properties();
+        Properties properties = loadProperties();
         properties.setProperty("logPath", newLogPath);
+        saveProperties(properties);
+    }
+
+    public static void writeWebhook(String webhook) {
+        Properties properties = loadProperties();
+        properties.setProperty("webhook", webhook);
+        saveProperties(properties);
+    }
+
+    private static Properties loadProperties() {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
+    }
+
+    private static void saveProperties(Properties properties) {
         try (FileOutputStream output = new FileOutputStream(CONFIG_FILE)) {
             properties.store(output, null);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static String readWebhook() {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream(CONFIG_FILE)) {
+            properties.load(input);
+            return properties.getProperty("webhook", "");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 }

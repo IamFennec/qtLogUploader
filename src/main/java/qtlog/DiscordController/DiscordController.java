@@ -3,12 +3,13 @@ package qtlog.DiscordController;
 import java.io.IOException;
 
 import qtlog.shared.LogDTO;
+import qtlog.util.ConfigManager;
 
 public class DiscordController implements IDiscordController{
     private DiscordWebhook webhook;
 
     public DiscordController(){
-        this.webhook = new DiscordWebhook("https://discordapp.com/api/webhooks/824076454126944296/9m0JkIcCSUvn1puB-PjyWJkRBrxqRKCjQA3aIrXK95n0MQvnsBY7-28sJelBgMOZX_qO");
+        this.webhook = new DiscordWebhook(ConfigManager.readWebhook());
     }
 
     @Override
