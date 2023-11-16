@@ -22,10 +22,12 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
         this.fileService.registerObs(this);
     }
 
+    //called when Log is finished uploading
     @Override
     public void updateLogObserver() {
         //code to process uploaded log i.e send to discord
         this.latestLog = this.logService.getLatestLogInfo();
+        this.discordService.sendMessage(latestLog);
         this.observer.updateModelObserver();
     }
 
@@ -39,6 +41,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
         return latestLog;
     }
 
+    //called when new log is found in directory
     @Override
     public void updateFileObserver() {
         //code to process newest file i.e. upload it
