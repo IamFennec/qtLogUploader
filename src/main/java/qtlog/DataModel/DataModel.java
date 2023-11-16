@@ -27,7 +27,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
     public void updateLogObserver() {
         //code to process uploaded log i.e send to discord
         this.latestLog = this.logService.getLatestLogInfo();
-        this.discordService.sendMessage(latestLog);
+        //this.discordService.sendMessage(latestLog);
         this.observer.updateModelObserver();
     }
 

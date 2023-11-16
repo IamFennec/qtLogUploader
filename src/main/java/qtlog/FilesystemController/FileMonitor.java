@@ -7,12 +7,7 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -84,7 +79,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
      * Register the given directory with the WatchService
      */
     private void registerKey(Path dir) throws IOException  {
-        WatchKey key = dir.register(watchservice, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
+        WatchKey key = dir.register(watchservice, StandardWatchEventKinds.ENTRY_MODIFY);
         if (trace) {
             Path prev = keys.get(key);
             if (prev == null) {
@@ -117,6 +112,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
      * Process all events for keys queued to the watcher
      */
     void processEvents() {
+        WatchEvent<Path> lastEvent = null;
         while(true) {
 
             // wait for key to be signalled
@@ -134,22 +130,22 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
             }
 
             for (WatchEvent<?> event: key.pollEvents()) {
-
+                
                 // Context for directory entry event is the file name of entry
                 WatchEvent<Path> ev = cast(event);
+                
                 Path name = ev.context();
                 Path child = dir.resolve(name);
 
-                if(event.kind() == StandardWatchEventKinds.ENTRY_MODIFY){
+                if(lastEvent != StandardWatchEventKinds.ENTRY_MODIFY){
                     this.newestFile.setFilename(name.toString());
                     this.newestFile.setFilepath(child.toString());
                     this.notifyObserver();
+                    System.out.format("%s: %s Name: %s\n", event.kind().name(), child, name);
                 }
-                // print out event
-                System.out.format("%s: %s Name: %s\n", event.kind().name(), child, name);
+                lastEvent = ev;
             }
-
-            // reset key and remove from set if directory no longer accessible
+            // reset key
             key.reset();
         }
     }
