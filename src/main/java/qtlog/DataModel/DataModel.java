@@ -3,6 +3,8 @@ package qtlog.DataModel;
 import qtlog.DPSReportController.ILogUploader;
 import qtlog.DiscordController.IDiscordController;
 import qtlog.FilesystemController.IFileMonitor;
+import qtlog.LogParser.ILogParser;
+import qtlog.LogParser.LogParser;
 import qtlog.UIController.IModelObserver;
 import qtlog.shared.FileDTO;
 import qtlog.shared.LogDTO;
@@ -13,6 +15,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
     private IFileMonitor fileService;
     private IDiscordController discordService;
     private ILogUploader logService;
+    private ILogParser logParser;
 
     public DataModel(ILogUploader logUploader, IDiscordController discordController, IFileMonitor fileMonitor){
         this.discordService = discordController;
@@ -20,6 +23,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
         this.fileService = fileMonitor;
         this.logService.registerObs(this);
         this.fileService.registerObs(this);
+        this.logParser = new LogParser();
     }
 
     //called when Log is finished uploading
@@ -47,6 +51,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
         //code to process newest file i.e. upload it
         FileDTO tempFile = this.fileService.getFileInformation();
         this.logService.uploadLog(tempFile);
+        this.logParser.giveLogToParse(tempFile);
     }
 
     @Override
