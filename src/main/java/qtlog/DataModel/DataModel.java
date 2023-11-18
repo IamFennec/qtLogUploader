@@ -6,8 +6,9 @@ import qtlog.FilesystemController.IFileMonitor;
 import qtlog.LogParser.ILogParser;
 import qtlog.LogParser.LogParser;
 import qtlog.UIController.IModelObserver;
-import qtlog.shared.FileDTO;
 import qtlog.shared.LogDTO;
+
+import java.nio.file.Path;
 
 public class DataModel implements IFileObserver, IDataModel, IModelObservable, ILogObserver{
     private IModelObserver observer;
@@ -49,9 +50,9 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
     @Override
     public void updateFileObserver() {
         //code to process newest file i.e. upload it
-        FileDTO tempFile = this.fileService.getFileInformation();
+        Path tempFile = this.fileService.getFileInformation();
         this.logService.uploadLog(tempFile);
-        this.logParser.giveLogToParse(tempFile);
+        this.logParser.readLog(tempFile);
     }
 
     @Override

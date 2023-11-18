@@ -14,16 +14,16 @@ public class EvtcAgent {
         this.name = name;
     }
 
-    private long addr;
-    private int prof;
-    private int is_Elite;
-    private int toughness;
-    private int concentration;
-    private int healing;
-    private int hitbox_width;
-    private int condition;
-    private int hitbox_height;
-    private String name;
+    private final long addr;
+    private final int prof;
+    private final int is_Elite;
+    private final int toughness;
+    private final int concentration;
+    private final int healing;
+    private final int hitbox_width;
+    private final int condition;
+    private final int hitbox_height;
+    private final String name;
 
     public long getAddr() {
         return addr;

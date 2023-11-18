@@ -1,6 +1,5 @@
 package qtlog.LogParser;
 
-import qtlog.shared.FileDTO;
 import qtlog.shared.RawLogDTO;
 
 import java.io.*;
@@ -19,27 +18,24 @@ public class LogParser implements ILogParser{
     private int agentCount;
     private int skillCount;
     @Override
-    public RawLogDTO giveLogToParse(FileDTO fileInfo) {
-        byte[] fileContent;
-        ByteArrayInputStream byteArrayStream;
-        Path filePath = Path.of(fileInfo.getFilepath());
+    public RawLogDTO readLog(Path filePath) {
 
-        if(logIsZipped(fileInfo.getFilename())){
-            try {
-                byte[] unzippedLog = unzipLog(fileInfo.getFilepath());
+        ByteArrayInputStream byteArrayStream;
+        //Path filePath = Path.of(fileInfo.getFilepath());
+
+        try{
+            if(logIsZipped(filePath.toString())){
+                byte[] unzippedLog = unzipLog(filePath.toString());
                 byteArrayStream = new ByteArrayInputStream(unzippedLog);
                 return parseLog(byteArrayStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
+            } else {
+                byte[] fileContent;
                 fileContent = Files.readAllBytes(filePath);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                byteArrayStream = new ByteArrayInputStream(fileContent);
+                return parseLog(byteArrayStream);
             }
-            byteArrayStream = new ByteArrayInputStream(fileContent);
-            return parseLog(byteArrayStream);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return new RawLogDTO();
     }
@@ -95,6 +91,7 @@ public class LogParser implements ILogParser{
                 }
             }
 
+            System.out.println(timePassed);
             //set fields
             tempLogDTO.setAccountNames(accNames);
             tempLogDTO.setLogTime(timePassed);
