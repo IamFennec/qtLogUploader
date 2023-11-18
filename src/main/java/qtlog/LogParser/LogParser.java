@@ -9,55 +9,50 @@ import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class LogParser implements ILogParser{
     private int agentCount;
     private int skillCount;
-    private ArrayList<EvtcSkill> skills = new ArrayList<>();
     @Override
     public RawLogDTO giveLogToParse(FileDTO fileInfo) {
         byte[] fileContent;
         ByteArrayInputStream byteArrayStream;
         Path filePath = Path.of(fileInfo.getFilepath());
-        try {
-            fileContent = Files.readAllBytes(filePath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        //dis = new DataInputStream(Files.newInputStream(Paths.get(fileInfo.getFilepath())));
-        char testChar = fileInfo.getFilename().charAt(fileInfo.getFilename().length() - 5);
-        System.out.println("testChar: " + testChar);
-        RawLogDTO parsedLog;
         if(logIsZipped(fileInfo.getFilename())){
             try {
                 byte[] unzippedLog = unzipLog(fileInfo.getFilepath());
                 byteArrayStream = new ByteArrayInputStream(unzippedLog);
-                parsedLog = parseLog(byteArrayStream);
+                return parseLog(byteArrayStream);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
+            try {
+                fileContent = Files.readAllBytes(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             byteArrayStream = new ByteArrayInputStream(fileContent);
-            parsedLog = parseLog(byteArrayStream);
+            return parseLog(byteArrayStream);
         }
         return new RawLogDTO();
     }
 
     private boolean logIsZipped(String filename){
-        char testChar = filename.charAt(filename.length() - 5);
-        return testChar == 'z';
+        return filename.charAt(filename.length() - 5) == 'z';
     }
 
     private byte[] unzipLog(String filepath) throws IOException{
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
 
-        try (ZipInputStream zipInputStream = new ZipInputStream(LogParser.class.getResourceAsStream(filepath))) {
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(filepath))) {
             ZipEntry zipEntry = zipInputStream.getNextEntry();
 
             while (zipEntry != null) {
@@ -76,12 +71,33 @@ public class LogParser implements ILogParser{
         RawLogDTO tempLogDTO = new RawLogDTO();
 
         try {
+            //parse log
             EvtcHeader header = getHeader(byteStream);
             agentCount = this.getInt(byteStream);
             ArrayList<EvtcAgent> agents = getAgentInfo(byteStream);
             skillCount = this.getInt(byteStream);
             ArrayList<EvtcSkill> skills = getSkillInfo(byteStream);
             ArrayList<EvtcCombatEvent> cbtevts = getCombatEventsInfo(byteStream);
+
+            //fill relevant data for further processing
+            //get time passed
+            long timePassed = cbtevts.get(cbtevts.size() - 1).getTime() - cbtevts.get(0).getTime();
+
+            //get account names from log
+            Set<String> accNames = new HashSet<>();
+            for(EvtcAgent agent: agents){
+                if(agent.getName().contains(".")){
+                    int accNameIndex = agent.getName().indexOf(":") + 1;
+                    int end = agent.getName().indexOf("\u0000", accNameIndex);
+                    String accountName = agent.getName().substring(accNameIndex, end);
+                    accNames.add(accountName);
+                    System.out.println(accountName);
+                }
+            }
+
+            //set fields
+            tempLogDTO.setAccountNames(accNames);
+            tempLogDTO.setLogTime(timePassed);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -125,8 +141,6 @@ public class LogParser implements ILogParser{
             byte speciesID = (byte) byteStream.read();
 
             header = new EvtcHeader(dateString, revision, bossID, speciesID);
-            System.out.println(dateString);
-            System.out.println(bossID);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -149,10 +163,7 @@ public class LogParser implements ILogParser{
             int hitbox_height = getShort(byteStream);
             byte[] name = new byte[68];
             byteStream.read(name);
-            String nameString = new String(name, StandardCharsets.UTF_8);
-            if(nameString.contains(".")){
-                System.out.println(nameString);
-            }
+            String nameString = new String(name, StandardCharsets.UTF_8).trim();
 
             agent = new EvtcAgent(addr, prof, is_Elite, toughness, concentration, healing, hitbox_width, condition, hitbox_height, nameString);
         } catch (IOException e) {

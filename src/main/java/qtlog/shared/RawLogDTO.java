@@ -4,12 +4,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class RawLogDTO {
-    private int logTime;
+    private long logTime;
     private Set<String> accountNames = new HashSet<>();
-    public int getLogTime() {
+    public Set<String> getAccountNames() {
+        return accountNames;
+    }
+    public void setAccountNames(Set<String> accountNames) {
+        this.accountNames = accountNames;
+    }
+    public long getLogTime() {
         return logTime;
     }
-    public void setLogTime(int logTime) {
+    public void setLogTime(long logTime) {
         this.logTime = logTime;
     }
+
 }

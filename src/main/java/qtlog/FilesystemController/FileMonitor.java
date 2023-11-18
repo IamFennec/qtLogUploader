@@ -62,8 +62,8 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
      * WatchService.
      */
     private void registerAll(final Path start) throws IOException {
-        // register directory and sub-directories
-        Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+        // register directory and subdirectories
+        Files.walkFileTree(start, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
                 throws IOException
@@ -98,7 +98,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
      */
     private void WatchDir(Path dir) throws IOException {
         this.watchservice = FileSystems.getDefault().newWatchService();
-        this.keys = new HashMap<WatchKey,Path>();
+        this.keys = new HashMap<>();
 
         System.out.format("Scanning %s ...\n", dir);
         this.registerAll(dir);
@@ -137,7 +137,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
                 Path name = ev.context();
                 Path child = dir.resolve(name);
 
-                if(lastEvent != StandardWatchEventKinds.ENTRY_MODIFY){
+                if((lastEvent != StandardWatchEventKinds.ENTRY_MODIFY) && (name.toString().contains("evtc"))){
                     this.newestFile.setFilename(name.toString());
                     this.newestFile.setFilepath(child.toString());
                     this.notifyObserver();

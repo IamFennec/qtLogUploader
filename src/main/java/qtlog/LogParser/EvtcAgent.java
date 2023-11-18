@@ -24,4 +24,44 @@ public class EvtcAgent {
     private int condition;
     private int hitbox_height;
     private String name;
+
+    public long getAddr() {
+        return addr;
+    }
+
+    public int getProf() {
+        return prof;
+    }
+
+    public int getIs_Elite() {
+        return is_Elite;
+    }
+
+    public int getToughness() {
+        return toughness;
+    }
+
+    public int getConcentration() {
+        return concentration;
+    }
+
+    public int getHealing() {
+        return healing;
+    }
+
+    public int getHitbox_width() {
+        return hitbox_width;
+    }
+
+    public int getCondition() {
+        return condition;
+    }
+
+    public int getHitbox_height() {
+        return hitbox_height;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
