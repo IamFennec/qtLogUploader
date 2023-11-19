@@ -3,6 +3,8 @@ package qtlog.FilesystemController;
 import qtlog.DataModel.IFileObserver;
 import qtlog.util.ConfigManager;
 
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
@@ -69,7 +71,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
      * Register the given directory with the WatchService
      */
     private void registerKey(java.nio.file.Path dir) throws IOException  {
-        WatchKey key = dir.register(watchservice, StandardWatchEventKinds.ENTRY_MODIFY);
+        WatchKey key = dir.register(watchservice, StandardWatchEventKinds.ENTRY_CREATE);
         if (trace) {
             java.nio.file.Path prev = keys.get(key);
             if (prev == null) {
@@ -120,21 +122,17 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
             }
 
             for (WatchEvent<?> event: key.pollEvents()) {
-                
                 // Context for directory entry event is the file name of entry
                 WatchEvent<java.nio.file.Path> ev = cast(event);
-                
-                java.nio.file.Path name = ev.context();
-                java.nio.file.Path child = dir.resolve(name);
-                System.out.println("filename: " + name.toString());
-                System.out.println(name.toString().endsWith("evtc"));
 
-                if((lastEvent != StandardWatchEventKinds.ENTRY_MODIFY) && (name.toString().contains("evtc"))){
-                    this.newestFile = child;
-                    this.notifyObserver();
-                    System.out.format("%s: %s Name: %s\n", event.kind().name(), child, name);
+
+                java.nio.file.Path child = dir.resolve(ev.context());
+                if(isFileStable(child)){
+                    if(isEvtcFile(child)){
+                        this.newestFile = child;
+                        this.notifyObserver();
+                    }
                 }
-                lastEvent = ev;
             }
             // reset key
             key.reset();
@@ -144,5 +142,21 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
         return (WatchEvent<T>)event;
+    }
+
+    private boolean isFileStable(Path filePath){
+        try (FileChannel channel = FileChannel.open(filePath, StandardOpenOption.WRITE);
+             FileLock lock = channel.lock()) {
+
+            // If the lock is acquired, the file is stable
+            return true;
+        } catch (IOException e) {
+            // Unable to acquire lock, file is likely being written
+            return false;
+        }
+    }
+
+    private boolean isEvtcFile(Path filePath){
+        return filePath.getFileName().toString().endsWith("evtc");
     }
 }

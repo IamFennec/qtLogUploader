@@ -19,9 +19,7 @@ public class LogParser implements ILogParser{
     private int skillCount;
     @Override
     public RawLogDTO readLog(Path filePath) {
-
         ByteArrayInputStream byteArrayStream;
-        //Path filePath = Path.of(fileInfo.getFilepath());
 
         try{
             if(logIsZipped(filePath.toString())){
@@ -87,7 +85,7 @@ public class LogParser implements ILogParser{
                     int end = agent.getName().indexOf("\u0000", accNameIndex);
                     String accountName = agent.getName().substring(accNameIndex, end);
                     accNames.add(accountName);
-                    System.out.println(accountName);
+                    //System.out.println(accountName);
                 }
             }
 
