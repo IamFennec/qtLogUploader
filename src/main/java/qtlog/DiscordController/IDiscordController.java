@@ -1,7 +1,7 @@
 package qtlog.DiscordController;
 
-import qtlog.shared.LogDTO;
+import qtlog.DPSReportController.DpsReportDTO;
 
 public interface IDiscordController {
-    public void sendMessage(LogDTO logInfo);
+    public void sendMessage(DpsReportDTO logInfo);
 }

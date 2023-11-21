@@ -1,8 +1,8 @@
 package qtlog.UIController;
 
+import qtlog.DPSReportController.DpsReportDTO;
 import qtlog.DataModel.IDataModel;
 import qtlog.UserInterface.IUserInterface;
-import qtlog.shared.LogDTO;
 
 public class UIController implements IModelObserver {
     private IDataModel dataModel;
@@ -16,7 +16,7 @@ public class UIController implements IModelObserver {
 
     @Override
     public void updateModelObserver() {
-        LogDTO tempLog = this.dataModel.getLatestLog();
+        DpsReportDTO tempLog = this.dataModel.getLatestLog();
         this.ui.updateUI(tempLog);
     }
 }

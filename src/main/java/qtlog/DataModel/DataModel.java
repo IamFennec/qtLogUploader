@@ -1,18 +1,18 @@
 package qtlog.DataModel;
 
+import qtlog.DPSReportController.DpsReportDTO;
 import qtlog.DPSReportController.ILogUploader;
 import qtlog.DiscordController.IDiscordController;
 import qtlog.FilesystemController.IFileMonitor;
 import qtlog.LogParser.ILogParser;
 import qtlog.LogParser.LogParser;
 import qtlog.UIController.IModelObserver;
-import qtlog.shared.LogDTO;
 
 import java.nio.file.Path;
 
 public class DataModel implements IFileObserver, IDataModel, IModelObservable, ILogObserver {
     private IModelObserver observer;
-    private LogDTO latestLog;
+    private DpsReportDTO latestLog;
     private IFileMonitor fileService;
     private IDiscordController discordService;
     private ILogUploader logService;
@@ -42,7 +42,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
     }
 
     @Override
-    public LogDTO getLatestLog() {
+    public DpsReportDTO getLatestLog() {
         return latestLog;
     }
 

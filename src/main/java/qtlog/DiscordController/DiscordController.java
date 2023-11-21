@@ -2,8 +2,8 @@ package qtlog.DiscordController;
 
 import java.io.IOException;
 
-import qtlog.shared.LogDTO;
-import qtlog.util.ConfigManager;
+import qtlog.ConfigManager.ConfigManager;
+import qtlog.DPSReportController.DpsReportDTO;
 
 public class DiscordController implements IDiscordController {
     private DiscordWebhook webhook;
@@ -13,7 +13,7 @@ public class DiscordController implements IDiscordController {
     }
 
     @Override
-    public void sendMessage(LogDTO logInfo) {
+    public void sendMessage(DpsReportDTO logInfo) {
         webhook.setContent("Kenzo and David marriage announcement, all welcome");
         webhook.setAvatarUrl(
                 "https://en.wikipedia.org/wiki/Same-sex_marriage#/media/File:Wedding_in_New_Orleans,_November_11,_2017.jpg");

@@ -1,7 +1,6 @@
 package qtlog.DPSReportController;
 
 import qtlog.DataModel.ILogObserver;
-import qtlog.shared.LogDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class LogUploader implements ILogUploader, ILogObservable {
     private ILogObserver observer;
-    private LogDTO latestLog;
+    private DpsReportDTO latestLog;
 
     @Override
     public void registerObs(ILogObserver obs) {
@@ -47,7 +46,7 @@ public class LogUploader implements ILogUploader, ILogObservable {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             System.out.println("Response: " + response.statusCode());
-            // updateLatestLog(response.body());
+            updateLatestLog(response.body());
 
         } catch (IOException | InterruptedException | IllegalArgumentException e) {
             e.printStackTrace();
@@ -56,7 +55,7 @@ public class LogUploader implements ILogUploader, ILogObservable {
     }
 
     @Override
-    public LogDTO getLatestLogInfo() {
+    public DpsReportDTO getLatestLogInfo() {
         return latestLog;
     }
 
@@ -70,8 +69,8 @@ public class LogUploader implements ILogUploader, ILogObservable {
         return HttpRequest.BodyPublishers.ofByteArrays(payload);
     }
 
-    // private static void updateLatestLog(String responseJson) {
-    // this.latestLog = new LogDTO()
-    // }
+    private void updateLatestLog(String responseJson) {
+        System.out.println(responseJson);
+    }
 
 }

@@ -2,13 +2,13 @@ package qtlog.Main;
 
 import java.util.Scanner;
 
+import qtlog.ConfigManager.ConfigManager;
 import qtlog.DPSReportController.LogUploader;
 import qtlog.DataModel.DataModel;
 import qtlog.DiscordController.DiscordController;
 import qtlog.FilesystemController.FileMonitor;
 import qtlog.UIController.UIController;
 import qtlog.UserInterface.UserInterface;
-import qtlog.util.ConfigManager;
 
 public class Main {
     public static void main(String[] args) {
