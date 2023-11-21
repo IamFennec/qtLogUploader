@@ -2,50 +2,8 @@ package qtlog.DPSReportController;
 
 import qtlog.DPSReportController.EvtcDTO;
 import qtlog.DPSReportController.PlayersDTO;
-
-// {
-//     "id": "d72e-20231121-194731",
-//     "permalink": "https:\/\/dps.report\/d72e-20231121-194731_golem",
-//     "uploadTime": 1700592448,
-//     "encounterTime": 1700592426,
-//     "generator": "Elite Insights",
-//     "generatorId": 1,
-//     "generatorVersion": 2,
-//     "language": "en",
-//     "languageId": 0,
-//     "evtc": {
-//         "type": "EVTC",
-//         "version": "20231113",
-//         "bossId": 16199
-//     },
-//     "players": {
-//         "Subi Akame": {
-//             "display_name": "Subi.8014",
-//             "character_name": "Subi Akame",
-//             "profession": 2,
-//             "elite_spec": 61
-//         }
-//     },
-//     "encounter": {
-//         "uniqueId": null,
-//         "success": false,
-//         "duration": 21.49,
-//         "compDps": 10652,
-//         "numberOfPlayers": 1,
-//         "numberOfGroups": 1,
-//         "bossId": 16199,
-//         "boss": "Standard Kitty Golem",
-//         "isCm": false,
-//         "gw2Build": 154410,
-//         "jsonAvailable": true
-//     },
-//     "report": {
-//         "anonymous": false,
-//         "detailed": false
-//     },
-//     "error": null,
-//     "userToken": "t39n48mmsqjskpbfi2sdmn42qmncfa5s"
-// }
+import qtlog.DPSReportController.EncounterDTO;
+import qtlog.DPSReportController.ReportDTO;
 
 public class DpsReportDTO {
     private String id;
@@ -59,5 +17,88 @@ public class DpsReportDTO {
     private int languageId;
     private EvtcDTO evtc;
     private PlayersDTO players;
+    private EncounterDTO encounter;
+    private ReportDTO report;
+    private String error;
+    private String userToken;
 
+    public DpsReportDTO(String id, String permalink, int uploadTime, int encounterTime, String generator,
+            int generatorId, int generatorVersion, String language, int languageId, EvtcDTO evtc, PlayersDTO players,
+            EncounterDTO encounter, ReportDTO report, String error, String userToken) {
+        this.id = id;
+        this.permalink = permalink;
+        this.uploadTime = uploadTime;
+        this.encounterTime = encounterTime;
+        this.generator = generator;
+        this.generatorId = generatorId;
+        this.generatorVersion = generatorVersion;
+        this.language = language;
+        this.languageId = languageId;
+        this.evtc = evtc;
+        this.players = players;
+        this.encounter = encounter;
+        this.report = report;
+        this.error = error;
+        this.userToken = userToken;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getPermalink() {
+        return this.permalink;
+    }
+
+    public int getUploadTime() {
+        return this.uploadTime;
+    }
+
+    public int getEncounterTime() {
+        return this.encounterTime;
+    }
+
+    public String getGenerator() {
+        return this.generator;
+    }
+
+    public int getGeneratorId() {
+        return this.generatorId;
+    }
+
+    public int getGeneratorVersion() {
+        return this.generatorVersion;
+    }
+
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public int getLanguageId() {
+        return this.languageId;
+    }
+
+    public EvtcDTO getEvtc() {
+        return this.evtc;
+    }
+
+    public PlayersDTO getPlayers() {
+        return this.players;
+    }
+
+    public EncounterDTO getEncounter() {
+        return this.encounter;
+    }
+
+    public ReportDTO getReport() {
+        return this.report;
+    }
+
+    public String getError() {
+        return this.error;
+    }
+
+    public String getUserToken() {
+        return this.userToken;
+    }
 }
