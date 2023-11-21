@@ -14,6 +14,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class LogUploader implements ILogUploader, ILogObservable {
     private ILogObserver observer;
     private DpsReportDTO latestLog;
@@ -71,6 +73,11 @@ public class LogUploader implements ILogUploader, ILogObservable {
 
     private void updateLatestLog(String responseJson) {
         System.out.println(responseJson);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            this.latestLog = mapper.readValue(responseJson, DpsReportDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
 }

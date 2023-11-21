@@ -1,9 +1,11 @@
 package qtlog.DPSReportController;
 
 import qtlog.DPSReportController.EvtcDTO;
-import qtlog.DPSReportController.PlayersDTO;
+import qtlog.DPSReportController.PlayerDTO;
 import qtlog.DPSReportController.EncounterDTO;
 import qtlog.DPSReportController.ReportDTO;
+
+import java.util.Map;
 
 public class DpsReportDTO {
     private String id;
@@ -16,31 +18,11 @@ public class DpsReportDTO {
     private String language;
     private int languageId;
     private EvtcDTO evtc;
-    private PlayersDTO players;
+    private Map<String, PlayerDTO> players;
     private EncounterDTO encounter;
     private ReportDTO report;
     private String error;
     private String userToken;
-
-    public DpsReportDTO(String id, String permalink, int uploadTime, int encounterTime, String generator,
-            int generatorId, int generatorVersion, String language, int languageId, EvtcDTO evtc, PlayersDTO players,
-            EncounterDTO encounter, ReportDTO report, String error, String userToken) {
-        this.id = id;
-        this.permalink = permalink;
-        this.uploadTime = uploadTime;
-        this.encounterTime = encounterTime;
-        this.generator = generator;
-        this.generatorId = generatorId;
-        this.generatorVersion = generatorVersion;
-        this.language = language;
-        this.languageId = languageId;
-        this.evtc = evtc;
-        this.players = players;
-        this.encounter = encounter;
-        this.report = report;
-        this.error = error;
-        this.userToken = userToken;
-    }
 
     public String getId() {
         return this.id;
@@ -82,7 +64,7 @@ public class DpsReportDTO {
         return this.evtc;
     }
 
-    public PlayersDTO getPlayers() {
+    public Map<String, PlayerDTO> getPlayers() {
         return this.players;
     }
 

@@ -5,12 +5,6 @@ public class EvtcDTO {
     private String version;
     private int bossId;
 
-    public EvtcDTO(String type, String version, int bossId) {
-        this.type = type;
-        this.version = version;
-        this.bossId = bossId;
-    }
-
     public String getType() {
         return this.type;
     }

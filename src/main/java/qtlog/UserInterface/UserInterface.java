@@ -6,6 +6,6 @@ public class UserInterface implements IUserInterface {
 
     @Override
     public void updateUI(DpsReportDTO logInfo) {
-        System.out.println("UserInterface updated!\nBoss: " + logInfo.getBossName());
+        System.out.println("UserInterface updated!\nBoss: " + logInfo.getEncounter().getBoss());
     }
 }

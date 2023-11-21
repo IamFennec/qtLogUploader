@@ -1,17 +1,15 @@
 package qtlog.DPSReportController;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PlayerDTO {
+    @JsonProperty("display_name")
     private String displayName;
+    @JsonProperty("character_name")
     private String characterName;
     private int profession;
-    private int elite_spec;
-
-    public PlayerDTO(String displayName, String characterName, int profession, int elite_spec) {
-        this.displayName = displayName;
-        this.characterName = characterName;
-        this.profession = profession;
-        this.elite_spec = elite_spec;
-    }
+    @JsonProperty("elite_spec")
+    private int eliteSpec;
 
     public String getDisplayName() {
         return this.displayName;
@@ -26,6 +24,6 @@ public class PlayerDTO {
     }
 
     public int getEliteSpec() {
-        return this.elite_spec;
+        return this.eliteSpec;
     }
 }

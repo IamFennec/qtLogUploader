@@ -9,30 +9,16 @@ public class EncounterDTO {
     private int numberOfGroups;
     private int bossId;
     private String boss;
+
     private boolean isCm;
     private int gw2Build;
     private boolean jsonAvailable;
-
-    public EncounterDTO(String uniqueId, boolean success, float duration, int compDps, int numberOfPlayers,
-            int numberOfGroups, int bossId, String boss, boolean isCm, int gw2Build, boolean jsonAvailable) {
-        this.uniqueId = uniqueId;
-        this.success = success;
-        this.duration = duration;
-        this.compDps = compDps;
-        this.numberOfPlayers = numberOfPlayers;
-        this.numberOfGroups = numberOfGroups;
-        this.bossId = bossId;
-        this.boss = boss;
-        this.isCm = isCm;
-        this.gw2Build = gw2Build;
-        this.jsonAvailable = jsonAvailable;
-    }
 
     public String getUniqueId() {
         return this.uniqueId;
     }
 
-    public boolean isSuccess() {
+    public boolean getSuccess() {
         return this.success;
     }
 
@@ -60,7 +46,7 @@ public class EncounterDTO {
         return this.boss;
     }
 
-    public boolean isCm() {
+    public boolean getIsCm() {
         return this.isCm;
     }
 
@@ -68,7 +54,7 @@ public class EncounterDTO {
         return this.gw2Build;
     }
 
-    public boolean isJsonAvailable() {
+    public boolean getJsonAvailable() {
         return this.jsonAvailable;
     }
 }
