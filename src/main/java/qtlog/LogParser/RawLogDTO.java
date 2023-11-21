@@ -1,4 +1,4 @@
-package qtlog.shared;
+package qtlog.LogParser;
 
 import java.util.HashSet;
 import java.util.Set;

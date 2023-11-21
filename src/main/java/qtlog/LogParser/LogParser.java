@@ -1,7 +1,5 @@
 package qtlog.LogParser;
 
-import qtlog.shared.RawLogDTO;
-
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

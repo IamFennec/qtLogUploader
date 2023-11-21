@@ -1,7 +1,7 @@
 package qtlog.FilesystemController;
 
+import qtlog.ConfigManager.ConfigManager;
 import qtlog.DataModel.IFileObserver;
-import qtlog.util.ConfigManager;
 
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
