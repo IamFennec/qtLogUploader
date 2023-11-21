@@ -12,6 +12,7 @@ public class EvtcHeader {
         this.bossID = bossID;
         this.speciesId = speciesId;
     }
+
     public String getDate() {
         return date;
     }
@@ -27,6 +28,5 @@ public class EvtcHeader {
     public byte getSpeciesId() {
         return speciesId;
     }
-
 
 }

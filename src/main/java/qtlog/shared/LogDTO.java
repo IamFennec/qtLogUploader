@@ -8,7 +8,7 @@ public class LogDTO {
     private String bossName;
     private boolean isCm;
 
-    public LogDTO(String logLink, int uploadTime, boolean success, int duration, String bossName, boolean isCm){
+    public LogDTO(String logLink, int uploadTime, boolean success, int duration, String bossName, boolean isCm) {
         this.logLink = logLink;
         this.uploadTime = uploadTime;
         this.success = success;

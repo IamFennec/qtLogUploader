@@ -5,5 +5,6 @@ import qtlog.shared.LogDTO;
 
 public interface IDataModel {
     public LogDTO getLatestLog();
+
     public void registerObs(IModelObserver observer);
 }

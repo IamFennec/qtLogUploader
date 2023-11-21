@@ -4,11 +4,11 @@ import qtlog.DataModel.IDataModel;
 import qtlog.UserInterface.IUserInterface;
 import qtlog.shared.LogDTO;
 
-public class UIController implements IModelObserver{
+public class UIController implements IModelObserver {
     private IDataModel dataModel;
     private IUserInterface ui;
 
-    public UIController(IDataModel dataModel, IUserInterface userInterface){
+    public UIController(IDataModel dataModel, IUserInterface userInterface) {
         this.ui = userInterface;
         this.dataModel = dataModel;
         this.dataModel.registerObs(this);

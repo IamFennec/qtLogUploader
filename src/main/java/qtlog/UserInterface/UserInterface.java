@@ -2,7 +2,7 @@ package qtlog.UserInterface;
 
 import qtlog.shared.LogDTO;
 
-public class UserInterface implements IUserInterface{
+public class UserInterface implements IUserInterface {
 
     @Override
     public void updateUI(LogDTO logInfo) {

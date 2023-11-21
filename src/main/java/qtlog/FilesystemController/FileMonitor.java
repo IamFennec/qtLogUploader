@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 
-public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
+public class FileMonitor implements IFileMonitor, IFileObservable, Runnable {
     IFileObserver observer;
     java.nio.file.Path filepath;
     WatchService watchservice;
@@ -19,7 +19,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
     private boolean trace;
     private Map<WatchKey, java.nio.file.Path> keys;
 
-    public FileMonitor(){
+    public FileMonitor() {
         this.trace = false;
         this.filepath = Paths.get(ConfigManager.readLogPath());
     }
@@ -38,7 +38,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
     public Path getFileInformation() {
         return newestFile;
     }
-    
+
     @Override
     public void run() {
         try {
@@ -58,8 +58,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
         Files.walkFileTree(start, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(java.nio.file.Path dir, BasicFileAttributes attrs)
-                throws IOException
-            {
+                    throws IOException {
                 registerKey(dir);
                 System.out.format("Registering dir: %s ...\n", dir);
                 return FileVisitResult.CONTINUE;
@@ -70,7 +69,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
     /**
      * Register the given directory with the WatchService
      */
-    private void registerKey(java.nio.file.Path dir) throws IOException  {
+    private void registerKey(java.nio.file.Path dir) throws IOException {
         WatchKey key = dir.register(watchservice, StandardWatchEventKinds.ENTRY_CREATE);
         if (trace) {
             java.nio.file.Path prev = keys.get(key);
@@ -105,7 +104,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
      */
     void processEvents() {
         WatchEvent<java.nio.file.Path> lastEvent = null;
-        while(true) {
+        while (true) {
 
             // wait for key to be signalled
             WatchKey key;
@@ -121,14 +120,13 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
                 continue;
             }
 
-            for (WatchEvent<?> event: key.pollEvents()) {
+            for (WatchEvent<?> event : key.pollEvents()) {
                 // Context for directory entry event is the file name of entry
                 WatchEvent<java.nio.file.Path> ev = cast(event);
 
-
                 java.nio.file.Path child = dir.resolve(ev.context());
-                if(isFileStable(child)){
-                    if(isEvtcFile(child)){
+                if (isFileStable(child)) {
+                    if (isEvtcFile(child)) {
                         this.newestFile = child;
                         this.notifyObserver();
                     }
@@ -141,12 +139,12 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
-        return (WatchEvent<T>)event;
+        return (WatchEvent<T>) event;
     }
 
-    private boolean isFileStable(Path filePath){
+    private boolean isFileStable(Path filePath) {
         try (FileChannel channel = FileChannel.open(filePath, StandardOpenOption.WRITE);
-             FileLock lock = channel.lock()) {
+                FileLock lock = channel.lock()) {
 
             // If the lock is acquired, the file is stable
             return true;
@@ -156,7 +154,7 @@ public class FileMonitor implements IFileMonitor, IFileObservable, Runnable{
         }
     }
 
-    private boolean isEvtcFile(Path filePath){
+    private boolean isEvtcFile(Path filePath) {
         return filePath.getFileName().toString().endsWith("evtc");
     }
 }

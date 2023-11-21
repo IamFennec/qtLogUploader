@@ -1,7 +1,8 @@
 package qtlog.LogParser;
 
 public class EvtcAgent {
-    public EvtcAgent(long addr, int prof, int is_Elite, int toughness, int concentration, int healing, int hitbox_width, int condition, int hitbox_height, String name) {
+    public EvtcAgent(long addr, int prof, int is_Elite, int toughness, int concentration, int healing, int hitbox_width,
+            int condition, int hitbox_height, String name) {
         this.addr = addr;
         this.prof = prof;
         this.is_Elite = is_Elite;
