@@ -1,4 +1,4 @@
-package qtlog.util;
+package qtlog.ConfigManager;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

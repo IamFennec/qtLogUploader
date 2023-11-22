@@ -1,7 +1,5 @@
 package qtlog.LogParser;
 
-import qtlog.shared.RawLogDTO;
-
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,15 +12,16 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class LogParser implements ILogParser{
+public class LogParser implements ILogParser {
     private int agentCount;
     private int skillCount;
+
     @Override
     public RawLogDTO readLog(Path filePath) {
         ByteArrayInputStream byteArrayStream;
 
-        try{
-            if(logIsZipped(filePath.toString())){
+        try {
+            if (logIsZipped(filePath.toString())) {
                 byte[] unzippedLog = unzipLog(filePath.toString());
                 byteArrayStream = new ByteArrayInputStream(unzippedLog);
                 return parseLog(byteArrayStream);
@@ -38,11 +37,11 @@ public class LogParser implements ILogParser{
         return new RawLogDTO();
     }
 
-    private boolean logIsZipped(String filename){
+    private boolean logIsZipped(String filename) {
         return filename.charAt(filename.length() - 5) == 'z';
     }
 
-    private byte[] unzipLog(String filepath) throws IOException{
+    private byte[] unzipLog(String filepath) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
 
@@ -61,11 +60,11 @@ public class LogParser implements ILogParser{
         return byteArrayOutputStream.toByteArray();
     }
 
-    private RawLogDTO parseLog(ByteArrayInputStream byteStream){
+    private RawLogDTO parseLog(ByteArrayInputStream byteStream) {
         RawLogDTO tempLogDTO = new RawLogDTO();
 
         try {
-            //parse log
+            // parse log
             EvtcHeader header = getHeader(byteStream);
             agentCount = this.getInt(byteStream);
             ArrayList<EvtcAgent> agents = getAgentInfo(byteStream);
@@ -73,24 +72,24 @@ public class LogParser implements ILogParser{
             ArrayList<EvtcSkill> skills = getSkillInfo(byteStream);
             ArrayList<EvtcCombatEvent> cbtevts = getCombatEventsInfo(byteStream);
 
-            //fill relevant data for further processing
-            //get time passed
+            // fill relevant data for further processing
+            // get time passed
             long timePassed = cbtevts.get(cbtevts.size() - 1).getTime() - cbtevts.get(0).getTime();
 
-            //get account names from log
+            // get account names from log
             Set<String> accNames = new HashSet<>();
-            for(EvtcAgent agent: agents){
-                if(agent.getName().contains(".")){
+            for (EvtcAgent agent : agents) {
+                if (agent.getName().contains(".")) {
                     int accNameIndex = agent.getName().indexOf(":") + 1;
                     int end = agent.getName().indexOf("\u0000", accNameIndex);
                     String accountName = agent.getName().substring(accNameIndex, end);
                     accNames.add(accountName);
-                    //System.out.println(accountName);
+                    // System.out.println(accountName);
                 }
             }
 
             System.out.println(timePassed);
-            //set fields
+            // set fields
             tempLogDTO.setAccountNames(accNames);
             tempLogDTO.setLogTime(timePassed);
         } catch (IOException e) {
@@ -118,21 +117,21 @@ public class LogParser implements ILogParser{
         return buffer.getLong();
     }
 
-    private EvtcHeader getHeader(ByteArrayInputStream byteStream){
+    private EvtcHeader getHeader(ByteArrayInputStream byteStream) {
         EvtcHeader header;
         try {
-            //read Version/Date
+            // read Version/Date
             byte[] date = new byte[12];
             byteStream.read(date);
             String dateString = new String(date, StandardCharsets.UTF_8);
 
-            //read revision byte
+            // read revision byte
             byte revision = (byte) byteStream.read();
 
-            //read bossID
+            // read bossID
             int bossID = getShort(byteStream);
 
-            //read speciesID (unused)
+            // read speciesID (unused)
             byte speciesID = (byte) byteStream.read();
 
             header = new EvtcHeader(dateString, revision, bossID, speciesID);
@@ -142,10 +141,10 @@ public class LogParser implements ILogParser{
         return header;
     }
 
-    private EvtcAgent readAgent(ByteArrayInputStream byteStream){
+    private EvtcAgent readAgent(ByteArrayInputStream byteStream) {
         EvtcAgent agent;
 
-        //read agent
+        // read agent
         try {
             long addr = getLong(byteStream);
             int prof = getInt(byteStream);
@@ -160,25 +159,26 @@ public class LogParser implements ILogParser{
             byteStream.read(name);
             String nameString = new String(name, StandardCharsets.UTF_8).trim();
 
-            agent = new EvtcAgent(addr, prof, is_Elite, toughness, concentration, healing, hitbox_width, condition, hitbox_height, nameString);
+            agent = new EvtcAgent(addr, prof, is_Elite, toughness, concentration, healing, hitbox_width, condition,
+                    hitbox_height, nameString);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return agent;
     }
 
-    private ArrayList<EvtcAgent> getAgentInfo(ByteArrayInputStream byteStream){
+    private ArrayList<EvtcAgent> getAgentInfo(ByteArrayInputStream byteStream) {
         ArrayList<EvtcAgent> tempAgents = new ArrayList<>();
-        for (int i = 0; i < agentCount; i++){
+        for (int i = 0; i < agentCount; i++) {
             tempAgents.add(readAgent(byteStream));
         }
         return tempAgents;
     }
 
-    private EvtcSkill readSkill(ByteArrayInputStream byteStream){
+    private EvtcSkill readSkill(ByteArrayInputStream byteStream) {
         EvtcSkill skill;
 
-        //read skill
+        // read skill
         try {
             int id = this.getInt(byteStream);
             byte[] name = new byte[64];
@@ -192,18 +192,18 @@ public class LogParser implements ILogParser{
         return skill;
     }
 
-    private ArrayList<EvtcSkill> getSkillInfo(ByteArrayInputStream byteStream){
+    private ArrayList<EvtcSkill> getSkillInfo(ByteArrayInputStream byteStream) {
         ArrayList<EvtcSkill> tempSkills = new ArrayList<>();
-        for (int i = 0; i < skillCount; i++){
+        for (int i = 0; i < skillCount; i++) {
             tempSkills.add(readSkill(byteStream));
         }
         return tempSkills;
     }
 
-    private EvtcCombatEvent readCombatEvent(ByteArrayInputStream byteStream){
+    private EvtcCombatEvent readCombatEvent(ByteArrayInputStream byteStream) {
         EvtcCombatEvent cbtevt;
 
-        //read combat event
+        // read combat event
         try {
             long time = getLong(byteStream);
             long src_agent = getLong(byteStream);
@@ -233,18 +233,20 @@ public class LogParser implements ILogParser{
             byte pad63 = (byte) byteStream.read();
             byte pad64 = (byte) byteStream.read();
 
-            cbtevt = new EvtcCombatEvent(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skillid, src_instid,
+            cbtevt = new EvtcCombatEvent(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skillid,
+                    src_instid,
                     dst_instid, src_master_instid, dst_master_instid, iff, buff, result, is_activation, is_buffremove,
-                    is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields, is_offcycle, pad61, pad62, pad63, pad64);
+                    is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields, is_offcycle, pad61, pad62,
+                    pad63, pad64);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return cbtevt;
     }
 
-    private ArrayList<EvtcCombatEvent> getCombatEventsInfo(ByteArrayInputStream byteStream){
+    private ArrayList<EvtcCombatEvent> getCombatEventsInfo(ByteArrayInputStream byteStream) {
         ArrayList<EvtcCombatEvent> cbtevts = new ArrayList<>();
-        while(byteStream.available() > 0) {
+        while (byteStream.available() > 0) {
             cbtevts.add(readCombatEvent(byteStream));
         }
         return cbtevts;

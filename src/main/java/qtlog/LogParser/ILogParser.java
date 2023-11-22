@@ -1,7 +1,5 @@
 package qtlog.LogParser;
 
-import qtlog.shared.RawLogDTO;
-
 import java.nio.file.Path;
 
 public interface ILogParser {

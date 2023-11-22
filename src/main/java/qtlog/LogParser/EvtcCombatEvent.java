@@ -2,10 +2,10 @@ package qtlog.LogParser;
 
 public class EvtcCombatEvent {
     public EvtcCombatEvent(long time, long src_agent, long dst_agent, int value, int buff_dmg, int overstack_value,
-                           int skillid, int src_instid, int dst_instid, int src_master_instid, int dst_master_instid,
-                           byte iff, byte buff, byte result, byte is_activation, byte is_buffremove, byte is_ninety,
-                           byte is_fifty, byte is_moving, byte is_statechange, byte is_flanking, byte is_shields,
-                           byte is_offcycle, byte pad61, byte pad62, byte pad63, byte pad64) {
+            int skillid, int src_instid, int dst_instid, int src_master_instid, int dst_master_instid,
+            byte iff, byte buff, byte result, byte is_activation, byte is_buffremove, byte is_ninety,
+            byte is_fifty, byte is_moving, byte is_statechange, byte is_flanking, byte is_shields,
+            byte is_offcycle, byte pad61, byte pad62, byte pad63, byte pad64) {
         this.time = time;
         this.src_agent = src_agent;
         this.dst_agent = dst_agent;

@@ -2,21 +2,21 @@ package qtlog.Main;
 
 import java.util.Scanner;
 
+import qtlog.ConfigManager.ConfigManager;
 import qtlog.DPSReportController.LogUploader;
 import qtlog.DataModel.DataModel;
 import qtlog.DiscordController.DiscordController;
 import qtlog.FilesystemController.FileMonitor;
 import qtlog.UIController.UIController;
 import qtlog.UserInterface.UserInterface;
-import qtlog.util.ConfigManager;
 
 public class Main {
     public static void main(String[] args) {
         start();
     }
 
-    public static void start(){
-        //Get Log Folder Path on first startup 
+    public static void start() {
+        // Get Log Folder Path on first startup
         String folderPath = ConfigManager.readLogPath();
         Scanner scanner = new Scanner(System.in);
 
@@ -26,7 +26,7 @@ public class Main {
             ConfigManager.writeLogPath(userInput);
         }
 
-        //Get webhook on first startup 
+        // Get webhook on first startup
         String webhook = ConfigManager.readWebhook();
 
         if (webhook.isEmpty()) {
@@ -36,7 +36,7 @@ public class Main {
             ConfigManager.writeWebhook(userInput);
         }
 
-        //init
+        // init
         FileMonitor fileMonitor = new FileMonitor();
         LogUploader logUploader = new LogUploader();
         DiscordController discordController = new DiscordController();
@@ -44,12 +44,11 @@ public class Main {
         UserInterface userInterface = new UserInterface();
         UIController uiController = new UIController(dataModel, userInterface);
 
-        //Start FileMonitor in a new Thread
-        Thread fileMonitorThread = new Thread(fileMonitor); 
+        // Start FileMonitor in a new Thread
+        Thread fileMonitorThread = new Thread(fileMonitor);
         fileMonitorThread.start();
 
-
-        while(true) {
+        while (true) {
 
         }
 

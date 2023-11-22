@@ -1,7 +1,7 @@
 package qtlog.UserInterface;
 
-import qtlog.shared.LogDTO;
+import qtlog.DPSReportController.DpsReportDTO;
 
 public interface IUserInterface {
-    public void updateUI(LogDTO logInfo);
+    public void updateUI(DpsReportDTO logInfo);
 }
