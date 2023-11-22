@@ -3,9 +3,12 @@ package qtlog.DataModel;
 import qtlog.DPSReportController.ILogUploader;
 import qtlog.DiscordController.IDiscordController;
 import qtlog.FilesystemController.IFileMonitor;
+import qtlog.LogParser.ILogParser;
+import qtlog.LogParser.LogParser;
 import qtlog.UIController.IModelObserver;
-import qtlog.shared.FileDTO;
 import qtlog.shared.LogDTO;
+
+import java.nio.file.Path;
 
 public class DataModel implements IFileObserver, IDataModel, IModelObservable, ILogObserver{
     private IModelObserver observer;
@@ -13,6 +16,7 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
     private IFileMonitor fileService;
     private IDiscordController discordService;
     private ILogUploader logService;
+    private ILogParser logParser;
 
     public DataModel(ILogUploader logUploader, IDiscordController discordController, IFileMonitor fileMonitor){
         this.discordService = discordController;
@@ -20,12 +24,15 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
         this.fileService = fileMonitor;
         this.logService.registerObs(this);
         this.fileService.registerObs(this);
+        this.logParser = new LogParser();
     }
 
+    //called when Log is finished uploading
     @Override
     public void updateLogObserver() {
         //code to process uploaded log i.e send to discord
         this.latestLog = this.logService.getLatestLogInfo();
+        //this.discordService.sendMessage(latestLog);
         this.observer.updateModelObserver();
     }
 
@@ -39,11 +46,13 @@ public class DataModel implements IFileObserver, IDataModel, IModelObservable, I
         return latestLog;
     }
 
+    //called when new log is found in directory
     @Override
     public void updateFileObserver() {
         //code to process newest file i.e. upload it
-        FileDTO tempFile = this.fileService.getFileInformation();
+        Path tempFile = this.fileService.getFileInformation();
         this.logService.uploadLog(tempFile);
+        this.logParser.readLog(tempFile);
     }
 
     @Override

@@ -1,8 +1,9 @@
 package qtlog.DPSReportController;
 
 import qtlog.DataModel.ILogObserver;
-import qtlog.shared.FileDTO;
 import qtlog.shared.LogDTO;
+
+import java.nio.file.Path;
 
 public class LogUploader implements ILogUploader, ILogObservable{
     private ILogObserver observer;
@@ -19,7 +20,7 @@ public class LogUploader implements ILogUploader, ILogObservable{
     }
 
     @Override
-    public void uploadLog(FileDTO fileInfo) {
+    public void uploadLog(Path fileInfo) {
         //logupload functionality here, maybe call helper functions etc.
         //mock implementation
         LogDTO tempLog = new LogDTO("www.snowcrows.com", 100, true, 100, "Deimos", false);

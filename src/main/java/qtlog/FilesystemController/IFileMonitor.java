@@ -1,12 +1,11 @@
 package qtlog.FilesystemController;
 
 import qtlog.DataModel.IFileObserver;
-import qtlog.shared.FileDTO;
+
+import java.nio.file.Path;
 
 public interface IFileMonitor {
-    public FileDTO getFileInformation();
-
-    public void setFolderpath(String folderpath);
+    public Path getFileInformation();
 
     public void registerObs(IFileObserver observer);
 }
